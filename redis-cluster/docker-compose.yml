@@ -76,6 +76,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.redis
+      args:
+        IDEMPIERE_IMAGE: ${IDEMPIERE_IMAGE:-idempiereofficial/idempiere:13-release}
     image: idempiere-redis-cluster:local
     container_name: idmp-a
     depends_on:
@@ -104,7 +106,9 @@ services:
     healthcheck:
       # Webui returns 200 once iDempiere has finished bootstrapping.
       # start_period is generous (5 min) because first-boot runs RUN_ImportIdempiere.sh.
-      test: ["CMD-SHELL", "wget --no-check-certificate -q -O- https://localhost:8443/webui/ >/dev/null 2>&1 || exit 1"]
+      # Probe with whichever HTTP client is present in the base image.
+      # The 13-release image ships wget; curl is the fallback for variants that don't.
+      test: ["CMD-SHELL", "wget --no-check-certificate -qO- https://localhost:8443/webui/ >/dev/null 2>&1 || curl -fsSk https://localhost:8443/webui/ >/dev/null 2>&1 || exit 1"]
       interval: 15s
       timeout: 10s
       retries: 30

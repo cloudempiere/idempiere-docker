@@ -13,7 +13,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-MODE="${1:-full}"
+MODE="${1:---full}"
 
 case "$MODE" in
   --single)
@@ -48,7 +48,7 @@ case "$MODE" in
     docker compose up -d idempiere-b
     ;;
 
-  --full|"")
+  --full)
     echo "Starting full stack (both nodes at once — assumes DB already seeded)..."
     docker compose up -d
     ;;

@@ -9,7 +9,8 @@
 # Build:   docker compose build      (or: docker build -f Dockerfile.redis -t idempiere-redis-cluster .)
 # Run:     handled by docker-compose.yml in this folder
 
-FROM idempiereofficial/idempiere:13-release
+ARG IDEMPIERE_IMAGE=idempiereofficial/idempiere:13-release
+FROM ${IDEMPIERE_IMAGE}
 
 USER root
 

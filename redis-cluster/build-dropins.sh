@@ -38,6 +38,11 @@ cp "$MANIFEST" "$MANIFEST.bak"
 trap 'mv "$MANIFEST.bak" "$MANIFEST" 2>/dev/null || true' EXIT
 
 echo "Patching MANIFEST.MF Require-Bundle floor 14.0.0 -> $TARGET_BASE_VERSION (build-time only, restored on exit)"
+if ! grep -qF 'org.adempiere.base;bundle-version="14.0.0"' "$MANIFEST"; then
+  echo "ERROR: expected 'org.adempiere.base;bundle-version=\"14.0.0\"' not found in $MANIFEST" >&2
+  echo "       Has the bundle's Require-Bundle floor changed? Update build-dropins.sh accordingly." >&2
+  exit 3
+fi
 sed "s/org\.adempiere\.base;bundle-version=\"14\.0\.0\"/org.adempiere.base;bundle-version=\"$TARGET_BASE_VERSION\"/" \
     "$MANIFEST" > "$MANIFEST.new"
 mv "$MANIFEST.new" "$MANIFEST"
