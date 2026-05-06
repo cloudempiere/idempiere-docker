@@ -31,7 +31,8 @@ MANIFEST="$IDEMPIERE_SRC/org.idempiere.redis.service/META-INF/MANIFEST.MF"
 TARGET_BASE_VERSION="13.0.0"
 
 if [[ "$(uname -s)" == "Darwin" ]] && [[ -z "${JAVA_HOME:-}" ]]; then
-  export JAVA_HOME="$(/usr/libexec/java_home -v 17)"
+  JAVA_HOME="$(/usr/libexec/java_home -v 17)"
+  export JAVA_HOME
 fi
 
 cp "$MANIFEST" "$MANIFEST.bak"
